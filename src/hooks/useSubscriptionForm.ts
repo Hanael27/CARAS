@@ -4,8 +4,7 @@ import {
   SubscriptionFormErrors,
   FormMessageStatus,
 } from '../types';
-
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { validateName, validateEmail } from '../utils/validation';
 
 const INITIAL_DATA: SubscriptionFormData = { name: '', email: '' };
 const INITIAL_ERRORS: SubscriptionFormErrors = { name: '', email: '' };
@@ -24,12 +23,6 @@ function useSubscriptionForm(): UseSubscriptionFormResult {
   const [formData, setFormData] = useState<SubscriptionFormData>(INITIAL_DATA);
   const [errors, setErrors] = useState<SubscriptionFormErrors>(INITIAL_ERRORS);
   const [messageStatus, setMessageStatus] = useState<FormMessageStatus>('idle');
-
-  const validateName = (value: string): string =>
-    value.trim() === '' ? 'El nombre no puede estar vacío.' : '';
-
-  const validateEmail = (value: string): string =>
-    EMAIL_REGEX.test(value.trim()) ? '' : 'Ingresa un correo electrónico válido.';
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;

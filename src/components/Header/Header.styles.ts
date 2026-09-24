@@ -17,7 +17,6 @@ export const HeaderLogos = styled.div`
   align-items: center;
 `;
 
-// Ahora se controla con la prop $visible, calculada a partir del estado del tema en React.
 export const HeaderLogo = styled.img<{ $visible: boolean }>`
   height: 3rem;
   display: ${(props) => (props.$visible ? 'block' : 'none')};
