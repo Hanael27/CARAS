@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const FooterWrapper = styled.footer`
   margin-top: 6.25rem;
-  background: #111;
-  color: #fff;
+  background: ${(props) => props.theme.colors.footerBg};
+  color: ${(props) => props.theme.colors.onFooter};
 `;
 
 export const FooterContainer = styled.div`
@@ -13,42 +13,44 @@ export const FooterContainer = styled.div`
 
 export const FooterLinks = styled.nav`
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  gap: 1.25rem;
+  gap: 0.5rem 1.5rem;
   margin-bottom: 0.9375rem;
   font-family: ${(props) => props.theme.fonts.ui};
-  font-size: 0.8125rem;
+  font-size: 1rem;
 
   a {
-    color: #fff;
-    text-decoration: none;
-    opacity: 0.85;
-    transition: opacity 0.2s;
+    color: ${(props) => props.theme.colors.onFooter};
+    padding: 0.5rem 0.25rem;
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
 
     &:hover {
-      opacity: 1;
-      text-decoration: underline;
+      text-decoration-thickness: 2px;
     }
   }
 `;
 
 export const FooterContact = styled.p`
   font-family: ${(props) => props.theme.fonts.ui};
-  font-size: 0.8125rem;
+  font-size: 1rem;
   margin-bottom: 0.5rem;
 
   a {
-    color: #fff;
-    text-decoration: none;
+    color: ${(props) => props.theme.colors.onFooter};
+    text-decoration: underline;
+    text-underline-offset: 0.25em;
 
     &:hover {
-      text-decoration: underline;
+      text-decoration-thickness: 2px;
     }
   }
 `;
 
+// Sin `opacity`: bajar la opacidad del texto reduce su contraste sin que se note en el código.
 export const FooterCopy = styled.p`
   font-family: ${(props) => props.theme.fonts.ui};
-  font-size: 0.8125rem;
-  opacity: 0.7;
+  font-size: 0.9375rem;
+  color: ${(props) => props.theme.colors.onFooter};
 `;

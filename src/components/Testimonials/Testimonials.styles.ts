@@ -9,8 +9,9 @@ export const TestimonialsTitle = styled.h2`
   margin-bottom: 2.5rem;
 `;
 
-export const TestimonialsGrid = styled.div`
+export const TestimonialsGrid = styled.ul`
   display: grid;
+  list-style: none;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.875rem;
 
@@ -19,7 +20,7 @@ export const TestimonialsGrid = styled.div`
   }
 `;
 
-export const TestimonialCard = styled.article`
+export const TestimonialCard = styled.li`
   text-align: center;
   background: ${(props) => props.theme.colors.card};
   padding: 1.875rem;
@@ -30,6 +31,7 @@ export const TestimonialPhoto = styled.img`
   width: 5rem;
   height: 5rem;
   object-fit: cover;
+  object-position: top; /* los retratos son verticales: se muestra el rostro */
   border-radius: 50%;
   margin-bottom: 0.9375rem;
 `;
@@ -38,10 +40,11 @@ export const TestimonialQuote = styled.p`
   font-style: italic;
 `;
 
-export const TestimonialAuthor = styled.span`
+export const TestimonialAuthor = styled.figcaption`
   display: block;
   margin-top: 0.5rem;
   font-family: ${(props) => props.theme.fonts.ui};
-  font-size: 0.8125rem;
+  font-size: 0.9375rem;
   font-weight: 700;
+  color: ${(props) => props.theme.colors.muted};
 `;

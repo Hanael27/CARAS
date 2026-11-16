@@ -20,9 +20,15 @@ describe('useSubscriptionForm', () => {
   it('inicia con datos, errores vacíos y estado "idle"', () => {
     const { result } = renderHook(() => useSubscriptionForm());
 
-    expect(result.current.formData).toEqual({ name: '', email: '' });
+    expect(result.current.formData).toEqual({
+      name: '',
+      email: '',
+      topics: [],
+      frequency: 'semanal',
+    });
     expect(result.current.errors).toEqual({ name: '', email: '' });
     expect(result.current.messageStatus).toBe('idle');
+    expect(result.current.failedSubmits).toBe(0);
   });
 
   it('actualiza el valor y el error de nombre al escribir', () => {
@@ -90,6 +96,49 @@ describe('useSubscriptionForm', () => {
 
     expect(result.current.messageStatus).toBe('success');
     expect(result.current.errors).toEqual({ name: '', email: '' });
-    expect(result.current.formData).toEqual({ name: '', email: '' });
+    expect(result.current.formData).toEqual({
+      name: '',
+      email: '',
+      topics: [],
+      frequency: 'semanal',
+    });
+  });
+
+  it('cuenta los envíos fallidos para devolver el foco al campo inválido', () => {
+    const { result } = renderHook(() => useSubscriptionForm());
+
+    act(() => {
+      result.current.handleSubmit(makeSubmitEvent());
+    });
+    act(() => {
+      result.current.handleSubmit(makeSubmitEvent());
+    });
+
+    expect(result.current.failedSubmits).toBe(2);
+  });
+
+  it('agrega y quita temas con handleTopicToggle', () => {
+    const { result } = renderHook(() => useSubscriptionForm());
+
+    act(() => {
+      result.current.handleTopicToggle('moda');
+      result.current.handleTopicToggle('noticias');
+    });
+    expect(result.current.formData.topics).toEqual(['moda', 'noticias']);
+
+    act(() => {
+      result.current.handleTopicToggle('moda');
+    });
+    expect(result.current.formData.topics).toEqual(['noticias']);
+  });
+
+  it('cambia la frecuencia con handleFrequencyChange', () => {
+    const { result } = renderHook(() => useSubscriptionForm());
+
+    act(() => {
+      result.current.handleFrequencyChange('mensual');
+    });
+
+    expect(result.current.formData.frequency).toBe('mensual');
   });
 });

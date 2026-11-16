@@ -4,25 +4,29 @@ import { renderWithTheme } from './test-utils';
 import ThemeToggle from '../components/ThemeToggle/ThemeToggle';
 
 describe('ThemeToggle', () => {
-  it('renderiza el checkbox sin marcar cuando isDark es false', () => {
+  it('es un interruptor (role="switch") con nombre accesible', () => {
     renderWithTheme(<ThemeToggle isDark={false} onToggle={jest.fn()} />);
 
-    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
-    expect(checkbox.checked).toBe(false);
+    expect(screen.getByRole('switch', { name: 'Modo oscuro' })).toBeInTheDocument();
   });
 
-  it('renderiza el checkbox marcado cuando isDark es true', () => {
+  it('indica con aria-checked="false" cuando isDark es false', () => {
+    renderWithTheme(<ThemeToggle isDark={false} onToggle={jest.fn()} />);
+
+    expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'false');
+  });
+
+  it('indica con aria-checked="true" cuando isDark es true', () => {
     renderWithTheme(<ThemeToggle isDark={true} onToggle={jest.fn()} />);
 
-    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
-    expect(checkbox.checked).toBe(true);
+    expect(screen.getByRole('switch')).toHaveAttribute('aria-checked', 'true');
   });
 
-  it('llama a onToggle cuando se hace clic en el checkbox', () => {
+  it('llama a onToggle cuando se hace clic', () => {
     const onToggle = jest.fn();
     renderWithTheme(<ThemeToggle isDark={false} onToggle={onToggle} />);
 
-    fireEvent.click(screen.getByRole('checkbox'));
+    fireEvent.click(screen.getByRole('switch'));
 
     expect(onToggle).toHaveBeenCalledTimes(1);
   });

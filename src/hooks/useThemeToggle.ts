@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { AppTheme, ThemeMode } from '../types';
 import { lightTheme, darkTheme } from '../styles/theme';
 
@@ -9,14 +9,29 @@ interface UseThemeToggleResult {
   toggleTheme: () => void;
 }
 
-// Maneja el estado del tema (claro/oscuro) que antes se controlaba
-// manipulando el atributo data-theme directamente en el DOM.
-function useThemeToggle(initialMode: ThemeMode = 'light'): UseThemeToggleResult {
-  const [mode, setMode] = useState<ThemeMode>(initialMode);
+// Si el sistema operativo de la persona está en modo oscuro, se empieza en oscuro.
+// matchMedia puede no existir (por ejemplo en las pruebas con jsdom): en ese caso, claro.
+function getPreferredMode(): ThemeMode {
+  const prefersDark =
+    typeof window !== 'undefined' &&
+    typeof window.matchMedia === 'function' &&
+    window.matchMedia('(prefers-color-scheme: dark)').matches;
+  return prefersDark ? 'dark' : 'light';
+}
+
+// Maneja el estado del tema (claro/oscuro).
+function useThemeToggle(initialMode?: ThemeMode): UseThemeToggleResult {
+  const [mode, setMode] = useState<ThemeMode>(() => initialMode ?? getPreferredMode());
 
   const toggleTheme = useCallback(() => {
     setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
   }, []);
+
+  // Avisa al navegador del esquema de color para que sus controles nativos
+  // (barras de desplazamiento, campos, etc.) coincidan con el tema.
+  useEffect(() => {
+    document.documentElement.style.colorScheme = mode;
+  }, [mode]);
 
   const theme = mode === 'dark' ? darkTheme : lightTheme;
 
